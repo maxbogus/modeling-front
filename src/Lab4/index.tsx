@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import { postData } from "../utils";
 
 interface Prop {
     result: Record<string, string>;
@@ -9,18 +10,6 @@ const Result = ({result}: Prop) => <div>{Object.keys(result).map((item)=> <div k
 interface FormProps {
     onSubmit: (data: undefined | Record<string, string>) => void;
 }
-
-async function postData(url = "", data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
-  }
 
 const Form = ({onSubmit}: FormProps) => {
     const [a, setA] = useState<string>("-5");
@@ -33,7 +22,7 @@ const Form = ({onSubmit}: FormProps) => {
 
     const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const result = await postData("http://localhost:5000/calculate", { a, b, k, sigma, number, percent, timeStep });
+        const result = await postData("http://localhost:5000/lab4/calculate", { a, b, k, sigma, number, percent, timeStep });
         console.log(result);
         onSubmit(result);
       };
