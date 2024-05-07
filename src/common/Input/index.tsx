@@ -1,15 +1,15 @@
-import { KeyboardEventHandler } from "react";
+import { ChangeEventHandler } from "react";
 
 interface InputProperties {
-    onKeyDown: KeyboardEventHandler<HTMLInputElement>;
+    onChange: ChangeEventHandler<HTMLInputElement>;
     value: string;
     label: string;
 }
 
-const Input = ({onKeyDown, value, label}: InputProperties) => <div>
+const Input = ({onChange, value, label}: InputProperties) => <div>
     <label htmlFor={label}>Enter integral {label} value:</label>
     <br />
-    <input name={label} onKeyDown={onKeyDown} defaultValue={value} />
+    <input name={label} onChange={onChange} defaultValue={value} />
   </div>;
 
 export {Input};

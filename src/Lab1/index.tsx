@@ -28,12 +28,12 @@ const Form = ({onSubmit}: FormProps) => {
       };
 
       return <form onSubmit={submitHandler}>
-      <Input onKeyDown={(event) => {setXMin(event.key);}} value={xMin} label="xMin" />
-      <Input onKeyDown={(event) => {setXMax(event.key);}} value={xMax} label="xMax" />
-      <Input onKeyDown={(event) => {setA(event.key);}} value={a} label="a" />
-      <Input onKeyDown={(event) => {setB(event.key);}} value={b} label="b" />
-      <Input onKeyDown={(event) => {setK(event.key);}} value={k} label="k" />
-      <Input onKeyDown={(event) => {setLambda(event.key);}} value={lambda} label="lambda" />
+      <Input onChange={(event) => {setXMin(event.target.value);}} value={xMin} label="xMin" />
+      <Input onChange={(event) => {setXMax(event.target.value);}} value={xMax} label="xMax" />
+      <Input onChange={(event) => {setA(event.target.value);}} value={a} label="a" />
+      <Input onChange={(event) => {setB(event.target.value);}} value={b} label="b" />
+      <Input onChange={(event) => {setK(event.target.value);}} value={k} label="k" />
+      <Input onChange={(event) => {setLambda(event.target.value);}} value={lambda} label="lambda" />
       <p>{`${xMin} ${xMax} ${a} ${b} ${k} ${lambda}`}</p>
       <button type="submit">Calculate</button>
     </form>;

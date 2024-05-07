@@ -31,37 +31,37 @@ const Form = ({onSubmit}: FormProps) => {
       <div>
         <label htmlFor="a">Enter normal distribution a value:</label>
         <br />
-        <input name='a' onKeyDown={(event) => {setA(event.key);}} defaultValue={a} />
+        <input name='a' onChange={(event) => {setA(event.target.value);}} defaultValue={a} />
       </div>
       <div>
         <label htmlFor="b">Enter normal distribution b value:</label>
         <br />
-        <input name="b" onKeyDown={(event) => {setB(event.key);}} defaultValue={b} />
+        <input name="b" onChange={(event) => {setB(event.target.value);}} defaultValue={b} />
       </div>
       <div>
         <label htmlFor="k">Enter Erlang distribution k value:</label>
         <br />
-        <input name="k" onKeyDown={(event) => {setK(event.key);}} defaultValue={k} />
+        <input name="k" onChange={(event) => {setK(event.target.value);}} defaultValue={k} />
       </div>
       <div>
         <label htmlFor="sigma">Enter Erlang distribution sigma value:</label>
         <br />
-        <input name="sigma" onKeyDown={(event) => {setSigma(event.key);}} defaultValue={sigma} />
+        <input name="sigma" onChange={(event) => {setSigma(event.target.value);}} defaultValue={sigma} />
       </div>
       <div>
         <label htmlFor="number">Enter number of requests:</label>
         <br />
-        <input name="number" onKeyDown={(event) => {setNumber(event.key);}} defaultValue={number} />
+        <input name="number" onChange={(event) => {setNumber(event.target.value);}} defaultValue={number} />
       </div>
       <div>
         <label htmlFor="percent">Enter percent:</label>
         <br />
-        <input name="percent" onKeyDown={(event) => {setPercent(event.key);}} defaultValue={percent} />
+        <input name="percent" onChange={(event) => {setPercent(event.target.value);}} defaultValue={percent} />
       </div>
       <div>
         <label htmlFor="timeStep">Enter time step:</label>
         <br />
-        <input name="timeStep" onKeyDown={(event) => {setTimeStep(event.key);}} defaultValue={timeStep} />
+        <input name="timeStep" onChange={(event) => {setTimeStep(event.target.value);}} defaultValue={timeStep} />
       </div>
 
       <p>{`a: ${a} ${b} ${k} ${sigma} ${number} ${percent} ${timeStep}`}</p>
