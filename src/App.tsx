@@ -21,19 +21,34 @@ const show = (lab: number | undefined) => {
     case 5:
       return <Lab5 />;
     default:
-      return <p>Please select lab</p>;
+      return <></>;
   }
-}
+};
 
 const App = () => {
   const labs = [1, 2, 3, 4, 5];
-  const [ selectedLab, setSelectedLab] = useState<number | undefined>();
+  const [selectedLab, setSelectedLab] = useState<number | undefined>();
   return (
-    <>
-      {labs.map((lab) => <button key={lab} onClick={() => setSelectedLab(lab)}>Lab: {lab}</button>)}
-      {show(selectedLab)}
-    </>
-  )
-}
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: 800, height: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 0 }}>
+        {!selectedLab && (
+          <div>
+            <p>Please select lab:</p>
+          </div>
+        )}
+        <div>
+          {labs.map((lab) => (
+            <button style={{ margin: 8 }} key={lab} onClick={() => setSelectedLab(lab)}>
+              Lab: {lab}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexGrow: 10, flexDirection: 'column' }}>
+        {show(selectedLab)}
+      </div>
+    </div>
+  );
+};
 
-export default App
+export default App;

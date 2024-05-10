@@ -1,15 +1,17 @@
-import { ChangeEventHandler } from "react";
+import { ChangeEventHandler } from 'react';
 
 interface InputProperties {
-    onChange: ChangeEventHandler<HTMLInputElement>;
-    value: string;
-    label: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  value: string;
+  label: string;
 }
 
-const Input = ({onChange, value, label}: InputProperties) => <div>
-    <label htmlFor={label}>Enter integral {label} value:</label>
+const Input = ({ onChange, value, label }: InputProperties) => (
+  <div>
+    <label htmlFor={label}>{label}</label>
     <br />
     <input name={label} onChange={onChange} defaultValue={value} />
-  </div>;
+  </div>
+);
 
-export {Input};
+export { Input };
