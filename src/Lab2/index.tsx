@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Input } from '../common/Input';
 import { postData } from '../utils';
 
@@ -34,28 +34,22 @@ interface FormProps {
 const Form = ({ onSubmit }: FormProps) => {
   const [conditionsQuantity, setConditionsQuantity] = useState<number>(10);
   const [step, setStep] = useState<number>(0.01);
-  const [intensityMaxtrix, setIntensityMaxtrix] = useState<string[][]>([
-    ['1', '2'],
-    ['2', '1']
-  ]);
+  const [intensityMaxtrix, setIntensityMaxtrix] = useState<string[][] | undefined>();
 
   const generateHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await postData('http://localhost:5000/lab2/generate', {
-      conditionsQuantity,
-      step
+      conditionsQuantity
     });
-    console.log(result);
-    onSubmit(result);
+    setIntensityMaxtrix(result.result);
   };
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await postData('http://localhost:5000/lab2/calculate', {
-      conditionsQuantity,
+      intensityMaxtrix,
       step
     });
-    console.log(result);
     onSubmit(result);
   };
 
@@ -72,14 +66,19 @@ const Form = ({ onSubmit }: FormProps) => {
         <button type="submit">Generate intensity</button>
       </form>
       <div>
-        {intensityMaxtrix.map((row, rowIndex) => (
+        {intensityMaxtrix?.map((row, rowIndex) => (
           <div key={rowIndex}>
             {row.map((item, columnIndex) => (
-              <input defaultValue={item} onChange={() => console.log(item)} />
+              <input style={{minWidth: 20, maxWidth: 60}} key={columnIndex} value={item} onChange={(event) => {
+                const newArray = [...intensityMaxtrix];
+                newArray[rowIndex][columnIndex] = event.target.value;
+                setIntensityMaxtrix(newArray);
+              }} />
             ))}
           </div>
         ))}
       </div>
+      
       <form onSubmit={submitHandler}>
         <Input
           onChange={(event) => {
