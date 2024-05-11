@@ -1,29 +1,21 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Input } from '../common/Input';
 import { postData } from '../utils';
 
-interface ProbabilityTable {
-  [key: string]: number[];
-}
-
 interface Prop {
-  probabilityTable: ProbabilityTable;
-  url: string;
+  p: string[];
+  t: string[];
+  src: string;
 }
 
-const Result = ({ probabilityTable, url }: Prop) => (
+const Result = ({ p, t, src }: Prop) => (
   <div>
     <h1>Результат вычисления</h1>
     <div>
-      {Object.keys(probabilityTable).map((rowName) => (
-        <div key={rowName}>
-          {probabilityTable[rowName].map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </div>
-      ))}
+      <p>P: {p.map((item)=> <span key={item}>{item}</span>)}</p>
+      <p>T: {t.map((item)=> <span key={item}>{item}</span>)}</p>
     </div>
-    <img src={url} alt="pic" />
+    <img src={`http://localhost:5000/${src}`} alt="pic" />
   </div>
 );
 
@@ -32,14 +24,14 @@ interface FormProps {
 }
 
 const Form = ({ onSubmit }: FormProps) => {
-  const [conditionsQuantity, setConditionsQuantity] = useState<number>(10);
+  const [matrixSize, setMatrixSize] = useState<number>(10);
   const [step, setStep] = useState<number>(0.01);
   const [intensityMaxtrix, setIntensityMaxtrix] = useState<string[][] | undefined>();
 
   const generateHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await postData('http://localhost:5000/lab2/generate', {
-      conditionsQuantity
+      matrixSize
     });
     setIntensityMaxtrix(result.result);
   };
@@ -48,8 +40,10 @@ const Form = ({ onSubmit }: FormProps) => {
     event.preventDefault();
     const result = await postData('http://localhost:5000/lab2/calculate', {
       intensityMaxtrix,
-      step
+      step,
+      matrixSize
     });
+    console.log(result);
     onSubmit(result);
   };
 
@@ -58,9 +52,9 @@ const Form = ({ onSubmit }: FormProps) => {
       <form onSubmit={generateHandler}>
         <Input
           onChange={(event) => {
-            setConditionsQuantity(parseFloat(event.target.value) ?? 0.0);
+            setMatrixSize(parseFloat(event.target.value) ?? 0.0);
           }}
-          value={`${conditionsQuantity}`}
+          value={`${matrixSize}`}
           label="Quantity of conditions"
         />
         <button type="submit">Generate intensity</button>
@@ -87,7 +81,8 @@ const Form = ({ onSubmit }: FormProps) => {
           value={`${step}`}
           label="step on graph"
         />
-        <p>{`${conditionsQuantity} ${step}`}</p>
+        {/* <p>{`${matrixSize} ${step}`}</p> */}
+        {/* {intensityMaxtrix?.map((row) => <p key={row.toString()}>{row}</p>)} */}
         <button type="submit">Solve and build graph</button>
       </form>
     </div>
@@ -100,7 +95,7 @@ export const Lab2 = () => {
     <div>
       <Form onSubmit={(data: Prop | undefined) => setResult(data)} />
       {result !== undefined && (
-        <Result url={result.url ?? ''} probabilityTable={result.probabilityTable ?? [[]]} />
+        <Result src={result.src ?? ''} p={result.p ?? [""]} t={result.t ?? [""]} />
       )}
     </div>
   );
