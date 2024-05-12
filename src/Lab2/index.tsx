@@ -12,8 +12,18 @@ const Result = ({ p, t, src }: Prop) => (
   <div>
     <h1>Результат вычисления</h1>
     <div>
-      <p>P: {p.map((item)=> <span key={item}>{item}</span>)}</p>
-      <p>T: {t.map((item)=> <span key={item}>{item}</span>)}</p>
+      <p>
+        P:{' '}
+        {p.map((item) => (
+          <span key={item}>{item}</span>
+        ))}
+      </p>
+      <p>
+        T:{' '}
+        {t.map((item) => (
+          <span key={item}>{item}</span>
+        ))}
+      </p>
     </div>
     <img src={`http://localhost:5000/${src}`} alt="pic" />
   </div>
@@ -63,16 +73,21 @@ const Form = ({ onSubmit }: FormProps) => {
         {intensityMaxtrix?.map((row, rowIndex) => (
           <div key={rowIndex}>
             {row.map((item, columnIndex) => (
-              <input style={{minWidth: 20, maxWidth: 60}} key={columnIndex} value={item} onChange={(event) => {
-                const newArray = [...intensityMaxtrix];
-                newArray[rowIndex][columnIndex] = event.target.value;
-                setIntensityMaxtrix(newArray);
-              }} />
+              <input
+                style={{ minWidth: 20, maxWidth: 60 }}
+                key={columnIndex}
+                value={item}
+                onChange={(event) => {
+                  const newArray = [...intensityMaxtrix];
+                  newArray[rowIndex][columnIndex] = event.target.value;
+                  setIntensityMaxtrix(newArray);
+                }}
+              />
             ))}
           </div>
         ))}
       </div>
-      
+
       <form onSubmit={submitHandler}>
         <Input
           onChange={(event) => {
@@ -81,8 +96,6 @@ const Form = ({ onSubmit }: FormProps) => {
           value={`${step}`}
           label="step on graph"
         />
-        {/* <p>{`${matrixSize} ${step}`}</p> */}
-        {/* {intensityMaxtrix?.map((row) => <p key={row.toString()}>{row}</p>)} */}
         <button type="submit">Solve and build graph</button>
       </form>
     </div>
@@ -95,7 +108,7 @@ export const Lab2 = () => {
     <div>
       <Form onSubmit={(data: Prop | undefined) => setResult(data)} />
       {result !== undefined && (
-        <Result src={result.src ?? ''} p={result.p ?? [""]} t={result.t ?? [""]} />
+        <Result src={result.src ?? ''} p={result.p ?? ['']} t={result.t ?? ['']} />
       )}
     </div>
   );
