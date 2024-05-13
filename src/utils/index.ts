@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 async function postData(url = '', data = {}) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -10,4 +12,9 @@ async function postData(url = '', data = {}) {
   return response.json(); // parses JSON response into native JavaScript objects
 }
 
-export { postData };
+function useForceUpdate() {
+  const [_, setValue] = useState(0); // integer state
+  return () => setValue((value) => value + 1);
+}
+
+export { postData, useForceUpdate };

@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { Input } from '../common/Input';
-import { postData } from '../utils';
+import { postData, useForceUpdate } from '../utils';
 
 interface Prop {
   p: string[];
@@ -104,11 +104,22 @@ const Form = ({ onSubmit }: FormProps) => {
 
 export const Lab2 = () => {
   const [result, setResult] = useState<Prop | undefined>();
+  const forceUpdate = useForceUpdate();
+
   return (
     <div>
-      <Form onSubmit={(data: Prop | undefined) => setResult(data)} />
+      <Form
+        onSubmit={(data: Prop | undefined) => {
+          setResult(data);
+          forceUpdate();
+        }}
+      />
       {result !== undefined && (
-        <Result src={result.src ?? ''} p={result.p ?? ['']} t={result.t ?? ['']} />
+        <Result
+          src={`${result.src}?${Math.random().toString(36)}`}
+          p={result.p ?? ['']}
+          t={result.t ?? ['']}
+        />
       )}
     </div>
   );

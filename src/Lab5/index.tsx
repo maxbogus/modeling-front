@@ -10,7 +10,7 @@ interface Result {
 
 const Result = ({ processed, refusals, percentage }: Result) => (
   <div>
-    <p>Result:</p>
+    <h6>Result:</h6>
     <p>Completed: {processed}</p>
     <p>Denied: {refusals}</p>
     <p>Percent: {percentage}%</p>
