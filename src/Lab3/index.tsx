@@ -15,6 +15,16 @@ const Check = () => {
   const [coeff, setCoeff] = useState<string | undefined>();
   const calculateCoeff = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const shouldExit: number[] = [];
+    coeffs.forEach((item, index) => {
+      if (isNaN(parseInt(item))) {
+        shouldExit.push(index);
+      }
+    });
+    if (shouldExit.length > 0) {
+      alert(`invalid value on index: ${shouldExit.join(', ')}`);
+      return;
+    }
     const result = await postData('http://localhost:5000/lab3/check', { table: coeffs });
     setCoeff(result.coeff);
   };
@@ -26,7 +36,7 @@ const Check = () => {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {coeffs.map((coeff, index) => (
             <div key={index}>
-              <span>{index + 1} </span>
+              <span>{index} </span>
               <input
                 style={{ minWidth: 30, maxWidth: 40 }}
                 value={coeff}
