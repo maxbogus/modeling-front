@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 async function postData(url = '', data = {}) {
   // Default options are marked with *
@@ -17,4 +17,10 @@ function useForceUpdate() {
   return () => setValue((value) => value + 1);
 }
 
-export { postData, useForceUpdate };
+function getRandomIntInclusive(min: number, max: number) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return `${Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled)}`; // The maximum is inclusive and the minimum is inclusive
+}
+
+export { postData, useForceUpdate, getRandomIntInclusive };

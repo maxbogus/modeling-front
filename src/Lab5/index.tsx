@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { postData } from '../utils';
+import { getRandomIntInclusive, postData } from '../utils';
 import { Input } from '../common/Input';
 
 interface Result {
@@ -28,8 +28,7 @@ export const Lab5 = () => {
   const [secondOperatorIntervalRange, setSecondOperatorIntervalRange] = useState<string>('10');
   const [thirdOperatorInterval, setThirdOperatorInterval] = useState<string>('40');
   const [thirdOperatorIntervalRange, setThirdOperatorIntervalRange] = useState<string>('20');
-  const [firstComputerInterval, setFirstComputerInterval] = useState<string>('15');
-  const [secondComputerInterval, setSecondComputerInterval] = useState<string>('30');
+  const [computerIntervals, setComputerIntervals] = useState<string[]>(['15', '30']);
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await postData('http://localhost:5000/lab5/calculate', {
@@ -42,8 +41,7 @@ export const Lab5 = () => {
       secondOperatorIntervalRange,
       thirdOperatorInterval,
       thirdOperatorIntervalRange,
-      firstComputerInterval,
-      secondComputerInterval
+      computerIntervals
     });
     console.log(result);
     setResult(result);
@@ -97,19 +95,35 @@ export const Lab5 = () => {
           onChange={(event) => setThirdOperatorIntervalRange(event.target.value)}
           label="+/- minutes range"
         />
-        <Input
-          value={firstComputerInterval}
-          onChange={(event) => setFirstComputerInterval(event.target.value)}
-          label="Computer 1"
-        />
-        <Input
-          value={secondComputerInterval}
-          onChange={(event) => setSecondComputerInterval(event.target.value)}
-          label="Computer 2"
-        />
+        {computerIntervals.map((item, index) => (
+          <div key={index} style={{ display: 'flex', margin: 8, justifyContent: 'center', alignItems: 'center' }}>
+            <Input
+              value={item}
+              onChange={(event) => {
+                const newIntervals = [...computerIntervals];
+                newIntervals[index] = event.target.value;
+                setComputerIntervals(newIntervals);
+              }}
+              label={`Computer ${index + 1}`}
+            />
+            <button
+              style={{ marginLeft: 8, padding: 0, width: 32, height: 32}}
+              onClick={() => {
+                setComputerIntervals(computerIntervals.filter((_, ndx) => ndx !== index));
+              }}>
+              x
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() => {
+            setComputerIntervals([...computerIntervals, getRandomIntInclusive(0, 100)]);
+          }}>
+          Add computer
+        </button>
         <p>{`${requests} ${clientInterval} ${clientIntervalRange}`}</p>
         <p>{`${firstOperatorInterval} ${firstOperatorIntervalRange} ${secondOperatorInterval} ${secondOperatorIntervalRange} ${thirdOperatorIntervalRange}`}</p>
-        <p>{`${firstComputerInterval} ${secondComputerInterval}`}</p>
+        <p>{computerIntervals.map((item) => `${item} `)}</p>
         <button>Get result</button>
       </form>
       {result !== undefined && <Result {...result} />}
