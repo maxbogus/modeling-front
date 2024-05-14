@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { postData } from '../utils';
+import { getRandomIntInclusive, postData } from '../utils';
 
 interface TableData {
   algCoeff?: number[];
@@ -8,11 +8,19 @@ interface TableData {
   tableData?: number[][];
 }
 
-const initialValues = ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0'];
+const initialValues = () => {
+  const result = [];
+  for (let i = 0; i < 10; i++) {
+    result.push(getRandomIntInclusive(0, 100));
+  }
+  return result;
+};
 
 const Check = () => {
   const [coeffs, setCoeffs] = useState<string[]>(initialValues);
   const [coeff, setCoeff] = useState<string | undefined>();
+  const [chi2coeff, setChi2coeff] = useState<string | undefined>();
+  const [scipyCoeff, setScipyCoeff] = useState<string | undefined>();
   const calculateCoeff = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const shouldExit: number[] = [];
@@ -27,11 +35,15 @@ const Check = () => {
     }
     const result = await postData('http://localhost:5000/lab3/check', { table: coeffs });
     setCoeff(result.coeff);
+    const chiResult = await postData('http://localhost:5000/lab3/chi2check', { table: coeffs });
+    setChi2coeff(chiResult.coeff);
+    const scipyResult = await postData('http://localhost:5000/lab3/scipy', { table: coeffs });
+    setScipyCoeff(scipyResult.coeff);
   };
 
   return (
     <div>
-      Manual testing:
+      <p>Manual testing:</p>
       <form onSubmit={calculateCoeff}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {coeffs.map((coeff, index) => (
@@ -50,6 +62,8 @@ const Check = () => {
           ))}
         </div>
         <div>{coeff !== undefined && <p>Coeff: {coeff}</p>}</div>
+        <div>{chi2coeff !== undefined && <p>Chi 2 Coeff: {chi2coeff}</p>}</div>
+        <div>{scipyCoeff !== undefined && <p>Scipycoeff Coeff: {scipyCoeff}</p>}</div>
         <button>Check</button>
       </form>
     </div>
