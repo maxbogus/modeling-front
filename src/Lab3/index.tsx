@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { FormEvent, useEffect, useState } from 'react';
 import { postData } from '../utils';
 
@@ -56,75 +57,78 @@ const Check = () => {
   );
 };
 
-const Tables = ({ algCoeff, algData = [[]], tableCoeff, tableData = [[]] }: TableData) => (
-  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-    {algData.length > 1 && tableData.length > 1 ? (
-      <>
-        <div style={{ display: 'flex', flexDirection: 'column', margin: 8 }}>
-          <h6>Algorithmic results:</h6>
-          <div style={{ maxHeight: '600px', height: '100%', overflowY: 'auto' }}>
-            {algData.map((item, index) => (
-              <div key={index} style={{ display: 'flex', border: '1px solid white' }}>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{index}</p>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[0]}</p>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[1]}</p>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[2]}</p>
-              </div>
-            ))}
-          </div>
-          <div>
-            <p>Table coeff:</p>
-            <div style={{ border: '1px solid white', display: 'flex' }}>
-              {tableCoeff?.map((item) => (
-                <p style={{ margin: 0, padding: 8, borderLeft: '1px solid white' }} key={item}>
-                  {`${item}`.slice(0, 5)}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', margin: 8 }}>
-          <h6>Table results:</h6>
-          <div style={{ maxHeight: '600px', height: '100%', overflowY: 'auto' }}>
-            {tableData.map((item, index) => (
-              <div key={index} style={{ display: 'flex', border: '1px solid white' }}>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{index}</p>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[0]}</p>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[1]}</p>
-                <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[2]}</p>
-              </div>
-            ))}
-          </div>
-          <div>
-            <p>Alg coeff:</p>
-            <div style={{ border: '1px solid white', display: 'flex' }}>
-              {algCoeff?.map((item) => (
-                <p style={{ margin: 0, padding: 8, borderLeft: '1px solid white' }} key={item}>
-                  {`${item}`.slice(0, 5)}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </>
-    ) : (
-      <p>Data is loading</p>
-    )}
+const showTables = ({algData = [], tableCoeff, tableData = [], algCoeff}: TableData) => <div style={{display: 'flex'}}><div style={{ display: 'flex', flexDirection: 'column', margin: 8 }}>
+<h6>Algorithmic results:</h6>
+<div style={{ maxHeight: '600px', height: '100%', overflowY: 'auto' }}>
+  {algData.map((item, index) => (
+    <div key={index} style={{ display: 'flex', border: '1px solid white' }}>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{index}</p>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[0]}</p>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[1]}</p>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[2]}</p>
+    </div>
+  ))}
+</div>
+<div>
+  <p>Table coeff:</p>
+  <div style={{ border: '1px solid white', display: 'flex' }}>
+    {tableCoeff?.map((item) => (
+      <p style={{ margin: 0, padding: 8, borderLeft: '1px solid white' }} key={item}>
+        {`${item}`.slice(0, 5)}
+      </p>
+    ))}
   </div>
-);
+</div>
+</div>
+<div style={{ display: 'flex', flexDirection: 'column', margin: 8 }}>
+<h6>Table results:</h6>
+<div style={{ maxHeight: '600px', height: '100%', overflowY: 'auto' }}>
+  {tableData.map((item, index) => (
+    <div key={index} style={{ display: 'flex', border: '1px solid white' }}>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{index}</p>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[0]}</p>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[1]}</p>
+      <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[2]}</p>
+    </div>
+  ))}
+</div>
+<div>
+  <p>Alg coeff:</p>
+  <div style={{ border: '1px solid white', display: 'flex' }}>
+    {algCoeff?.map((item) => (
+      <p style={{ margin: 0, padding: 8, borderLeft: '1px solid white' }} key={item}>
+        {`${item}`.slice(0, 5)}
+      </p>
+    ))}
+  </div>
+</div>
+</div>
+</div>;
+
+const Tables = () => {
+  const [tableData, setTableData] = useState<TableData | undefined>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const getTableData = async () => {
+    setIsLoading(true);
+    const result = await postData('http://localhost:5000/lab3/calculate');
+    setTableData(result);
+    setIsLoading(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <button style={{ width: 100, margin: 8 }} onClick={() => getTableData()}>
+        Load data
+      </button>
+      {!isLoading ? tableData !== undefined ? 
+        showTables(tableData) : <></> : <p>Data is loading</p>}
+    </div>
+  );
+};
 
 export const Lab3 = () => {
   const [option, setOption] = useState<boolean>(false);
-  const [tableData, setTableData] = useState<TableData>();
-
-  const getTableData = async () => {
-    const result = await postData('http://localhost:5000/lab3/calculate');
-    setTableData(result);
-  };
-
-  useEffect(() => {
-    getTableData();
-  }, []);
 
   return (
     <div>
@@ -134,7 +138,7 @@ export const Lab3 = () => {
       <button onClick={() => setOption(true)} disabled={option === true}>
         Check
       </button>
-      {option ? <Check /> : <Tables {...tableData} />}
+      {option ? <Check /> : <Tables />}
     </div>
   );
 };
