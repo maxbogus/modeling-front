@@ -31,11 +31,6 @@ const App = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: 800, height: '100%' }}>
       <div style={{ display: 'flex', flexDirection: 'column', flexGrow: 0 }}>
-        {!selectedLab && (
-          <div>
-            <p>Please select lab:</p>
-          </div>
-        )}
         <div>
           {labs.map((lab) => (
             <button style={{ margin: 8 }} key={lab} onClick={() => setSelectedLab(lab)}>
@@ -45,7 +40,7 @@ const App = () => {
         </div>
       </div>
       <div style={{ display: 'flex', flexGrow: 10, flexDirection: 'column' }}>
-        <p>Showing Lab {selectedLab}</p>
+        <p>{selectedLab !== undefined ? `Showing Lab ${selectedLab}` : 'Please select lab!'}</p>
         {show(selectedLab)}
       </div>
     </div>
