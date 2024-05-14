@@ -19,29 +19,28 @@ const Result = ({ processed, refusals, percentage }: Result) => (
 
 export const Lab5 = () => {
   const [result, setResult] = useState<Result>();
-  const [requests, setRequests] = useState<string>('300');
-  const [clientInterval, setClientInterval] = useState<string>('10');
-  const [clientIntervalRange, setClientIntervalRange] = useState<string>('2');
-  const [firstOperatorInterval, setFirstOperatorInterval] = useState<string>('20');
-  const [firstOperatorIntervalRange, setFirstOperatorIntervalRange] = useState<string>('5');
-  const [secondOperatorInterval, setSecondOperatorInterval] = useState<string>('40');
-  const [secondOperatorIntervalRange, setSecondOperatorIntervalRange] = useState<string>('10');
-  const [thirdOperatorInterval, setThirdOperatorInterval] = useState<string>('40');
-  const [thirdOperatorIntervalRange, setThirdOperatorIntervalRange] = useState<string>('20');
-  const [computerIntervals, setComputerIntervals] = useState<string[]>(['15', '30']);
+  const [requests, setRequests] = useState<string>(`${getRandomIntInclusive(100, 1000)}`);
+  const [clientInterval, setClientInterval] = useState<string>(`${getRandomIntInclusive(10, 20)}`);
+  const [clientIntervalRange, setClientIntervalRange] = useState<string>(
+    `${getRandomIntInclusive(1, 5)}`
+  );
+  const [operators, setOperators] = useState<string[][]>([
+    [`${getRandomIntInclusive(10, 40)}`, `${getRandomIntInclusive(5, 20)}`],
+    [`${getRandomIntInclusive(10, 40)}`, `${getRandomIntInclusive(5, 20)}`],
+    [`${getRandomIntInclusive(10, 40)}`, `${getRandomIntInclusive(5, 20)}`]
+  ]);
+  const [computerIntervals, setComputerIntervals] = useState<string[]>([
+    `${getRandomIntInclusive(10, 20)}`,
+    `${getRandomIntInclusive(20, 50)}`
+  ]);
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await postData('http://localhost:5000/lab5/calculate', {
       requests,
       clientInterval,
       clientIntervalRange,
-      firstOperatorInterval,
-      firstOperatorIntervalRange,
-      secondOperatorInterval,
-      secondOperatorIntervalRange,
-      thirdOperatorInterval,
-      thirdOperatorIntervalRange,
-      computerIntervals
+      computerIntervals,
+      operators
     });
     console.log(result);
     setResult(result);
@@ -65,38 +64,32 @@ export const Lab5 = () => {
           onChange={(event) => setClientIntervalRange(event.target.value)}
           label="+/- minutes range"
         />
-        <Input
-          value={firstOperatorInterval}
-          onChange={(event) => setFirstOperatorInterval(event.target.value)}
-          label="Operator 1"
-        />
-        <Input
-          value={firstOperatorIntervalRange}
-          onChange={(event) => setFirstOperatorIntervalRange(event.target.value)}
-          label="+/- minutes range"
-        />
-        <Input
-          value={secondOperatorInterval}
-          onChange={(event) => setSecondOperatorInterval(event.target.value)}
-          label="Operator 2"
-        />
-        <Input
-          value={secondOperatorIntervalRange}
-          onChange={(event) => setSecondOperatorIntervalRange(event.target.value)}
-          label="+/- minutes range"
-        />
-        <Input
-          value={thirdOperatorInterval}
-          onChange={(event) => setThirdOperatorInterval(event.target.value)}
-          label="Operator 3"
-        />
-        <Input
-          value={thirdOperatorIntervalRange}
-          onChange={(event) => setThirdOperatorIntervalRange(event.target.value)}
-          label="+/- minutes range"
-        />
+        {operators.map((operator, index) => (
+          <div key={index}>
+            <Input
+              value={operator[0]}
+              onChange={(event) => {
+                const newOpetarors = [...operators];
+                newOpetarors[index][0] = event.target.value;
+                setOperators(newOpetarors);
+              }}
+              label={`Operator ${index + 1}`}
+            />
+            <Input
+              value={operator[1]}
+              onChange={(event) => {
+                const newOpetarors = [...operators];
+                newOpetarors[index][1] = event.target.value;
+                setOperators(newOpetarors);
+              }}
+              label="+/- minutes range"
+            />
+          </div>
+        ))}
         {computerIntervals.map((item, index) => (
-          <div key={index} style={{ display: 'flex', margin: 8, justifyContent: 'center', alignItems: 'center' }}>
+          <div
+            key={index}
+            style={{ display: 'flex', margin: 8, justifyContent: 'center', alignItems: 'center' }}>
             <Input
               value={item}
               onChange={(event) => {
@@ -106,23 +99,10 @@ export const Lab5 = () => {
               }}
               label={`Computer ${index + 1}`}
             />
-            <button
-              style={{ marginLeft: 8, padding: 0, width: 32, height: 32}}
-              onClick={() => {
-                setComputerIntervals(computerIntervals.filter((_, ndx) => ndx !== index));
-              }}>
-              x
-            </button>
           </div>
         ))}
-        <button
-          onClick={() => {
-            setComputerIntervals([...computerIntervals, getRandomIntInclusive(0, 100)]);
-          }}>
-          Add computer
-        </button>
         <p>{`${requests} ${clientInterval} ${clientIntervalRange}`}</p>
-        <p>{`${firstOperatorInterval} ${firstOperatorIntervalRange} ${secondOperatorInterval} ${secondOperatorIntervalRange} ${thirdOperatorIntervalRange}`}</p>
+        <p>{operators.map((item) => `${item[0]} ${item[1]} | `)}</p>
         <p>{computerIntervals.map((item) => `${item} `)}</p>
         <button>Get result</button>
       </form>
