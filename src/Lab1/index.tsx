@@ -11,7 +11,7 @@ const Result = ({ result }: Prop) => (
     {Object.keys(result).map((item) => (
       <div key={item}>
         <p>{item}:</p>
-        <img alt={item} src={result[item]} />
+        <img alt={item} src={`${result[item]}?${Math.random().toString(36)}`} />
       </div>
     ))}
   </div>

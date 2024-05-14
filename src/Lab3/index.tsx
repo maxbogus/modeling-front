@@ -46,63 +46,52 @@ const Check = () => {
   );
 };
 
-const Tables = ({
-  algCoeff,
-  algData = [[], [], []],
-  tableCoeff,
-  tableData = [[], [], []]
-}: TableData) => (
-  <div style={{ display: 'flex' }}>
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+const Tables = ({ algCoeff, algData = [[]], tableCoeff, tableData = [[]] }: TableData) => (
+  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', margin: 8 }}>
+      <h6>Algorithmic results:</h6>
       <div style={{ maxHeight: '600px', height: '100%', overflowY: 'auto' }}>
-        {algData[0].map((_, index) => (
+        {algData.map((item, index) => (
           <div key={index} style={{ display: 'flex', border: '1px solid white' }}>
             <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{index}</p>
-            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>
-              {algData[0][index]}
-            </p>
-            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>
-              {algData[1][index]}
-            </p>
-            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>
-              {algData[2][index]}
-            </p>
+            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[0]}</p>
+            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[1]}</p>
+            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[2]}</p>
           </div>
         ))}
       </div>
       <div>
-        Table coeff:{' '}
-        {tableCoeff?.map((item) => (
-          <span style={{ margin: 4 }} key={item}>
-            {`${item}`.slice(0, 5)}
-          </span>
-        ))}
+        <p>Table coeff:</p>
+        <div style={{ border: '1px solid white', display: 'flex' }}>
+          {tableCoeff?.map((item) => (
+            <p style={{ margin: 0, padding: 8, borderLeft: '1px solid white' }} key={item}>
+              {`${item}`.slice(0, 5)}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', margin: 8 }}>
+      <h6>Table results:</h6>
       <div style={{ maxHeight: '600px', height: '100%', overflowY: 'auto' }}>
-        {tableData[0].map((_, index) => (
+        {tableData.map((item, index) => (
           <div key={index} style={{ display: 'flex', border: '1px solid white' }}>
             <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{index}</p>
-            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>
-              {tableData[0][index]}
-            </p>
-            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>
-              {tableData[1][index]}
-            </p>
-            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>
-              {tableData[2][index]}
-            </p>
+            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[0]}</p>
+            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[1]}</p>
+            <p style={{ borderLeft: '1px solid white', padding: 8, margin: 0 }}>{item[2]}</p>
           </div>
         ))}
       </div>
       <div>
-        Alg coeff:{' '}
-        {algCoeff?.map((item) => (
-          <span style={{ margin: 4 }} key={item}>
-            {`${item}`.slice(0, 5)}
-          </span>
-        ))}
+        <p>Alg coeff:</p>
+        <div style={{ border: '1px solid white', display: 'flex' }}>
+          {algCoeff?.map((item) => (
+            <p style={{ margin: 0, padding: 8, borderLeft: '1px solid white' }} key={item}>
+              {`${item}`.slice(0, 5)}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   </div>
