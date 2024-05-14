@@ -10,7 +10,7 @@ const Input = ({ onChange, value, label }: InputProperties) => (
   <div>
     <label htmlFor={label}>{label}</label>
     <br />
-    <input name={label} onChange={onChange} defaultValue={value} />
+    <input name={label} onChange={onChange} value={value} />
   </div>
 );
 
