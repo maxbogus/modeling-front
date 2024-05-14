@@ -7,13 +7,8 @@ interface Prop {
 
 const Result = ({ result }: Prop) => (
   <div>
-    {Object.keys(result).map((item) => (
-      <div key={item}>
-        <p>
-          {item}: {result[item]}
-        </p>
-      </div>
-    ))}
+    <p>Step Approach: {result.stepApproach}</p>
+    <p>Event Model Approach: {result.eventModel}</p>
   </div>
 );
 
@@ -32,6 +27,52 @@ const Form = ({ onSubmit }: FormProps) => {
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const aValue = parseFloat(a);
+    const bValue = parseFloat(b);
+    const kValue = parseInt(k, 10);
+    const lValue = parseFloat(sigma);
+    const tasksValue = parseFloat(number);
+    const probabilityValue = parseInt(percent, 10);
+    const stepValue = parseFloat(timeStep);
+
+    if (
+      isNaN(aValue) ||
+      isNaN(bValue) ||
+      isNaN(kValue) ||
+      isNaN(lValue) ||
+      isNaN(tasksValue) ||
+      isNaN(probabilityValue) ||
+      isNaN(stepValue)
+    ) {
+      alert('entered invalid value!');
+      return;
+    }
+    if (aValue >= bValue) {
+      alert('a is bigger than b!');
+      return;
+    }
+    if (kValue <= 0 || lValue < 0) {
+      alert(
+        'Неверно заданы параметры для распределения Эрланга.\nТребуется, чтобы λ >= 0, k = 1, 2, ...!'
+      );
+      return;
+    }
+
+    if (tasksValue <= 0) {
+      alert('Неверно задано количество заявок!');
+      return;
+    }
+
+    if (probabilityValue < 0 || probabilityValue > 100) {
+      alert('Неверно задана вероятность возврата заявки!');
+      return;
+    }
+
+    if (stepValue <= 0) {
+      alert('Неверно задан временной шаг!');
+      return;
+    }
+
     const result = await postData('http://localhost:5000/lab4/calculate', {
       a,
       b,
@@ -124,9 +165,9 @@ const Form = ({ onSubmit }: FormProps) => {
           defaultValue={timeStep}
         />
       </div>
-
-      <p>{`a: ${a} ${b} ${k} ${sigma} ${number} ${percent} ${timeStep}`}</p>
-      <button type="submit">Calculate</button>
+      <button type="submit" style={{ margin: 8 }}>
+        Calculate
+      </button>
     </form>
   );
 };

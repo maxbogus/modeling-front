@@ -24,7 +24,7 @@ const Result = ({ p, t, src }: Prop) => (
         <p style={{ padding: 8, margin: 0, width: 50 }}>T:</p>
         {t.map((item) => (
           <p key={item} style={{ padding: 8, margin: 0, width: 50, borderLeft: '1px solid white' }}>
-            {item}
+            {`${item}`.slice(0, 6)}
           </p>
         ))}
       </div>
