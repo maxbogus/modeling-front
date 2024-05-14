@@ -12,18 +12,22 @@ const Result = ({ p, t, src }: Prop) => (
   <div>
     <h1>Результат вычисления</h1>
     <div>
-      <p>
-        P:{' '}
+      <div style={{ display: 'flex', border: '1px solid white' }}>
+        <p style={{ padding: 8, margin: 0, width: 50 }}>P:</p>
         {p.map((item) => (
-          <span key={item}>{item}</span>
+          <p key={item} style={{ padding: 8, margin: 0, width: 50, borderLeft: '1px solid white' }}>
+            {`${item}`.slice(0, 6)}
+          </p>
         ))}
-      </p>
-      <p>
-        T:{' '}
+      </div>
+      <div style={{ display: 'flex', border: '1px solid white', marginBottom: 8 }}>
+        <p style={{ padding: 8, margin: 0, width: 50 }}>T:</p>
         {t.map((item) => (
-          <span key={item}>{item}</span>
+          <p key={item} style={{ padding: 8, margin: 0, width: 50, borderLeft: '1px solid white' }}>
+            {item}
+          </p>
         ))}
-      </p>
+      </div>
     </div>
     <img src={`http://localhost:5000/${src}`} alt="pic" />
   </div>
@@ -34,12 +38,25 @@ interface FormProps {
 }
 
 const Form = ({ onSubmit }: FormProps) => {
-  const [matrixSize, setMatrixSize] = useState<number>(10);
-  const [step, setStep] = useState<number>(0.01);
+  const [matrixSize, setMatrixSize] = useState<string>('10');
+  const [step, setStep] = useState<string>('0.01');
   const [intensityMaxtrix, setIntensityMaxtrix] = useState<string[][] | undefined>();
 
   const generateHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const matrixSizeValue = parseInt(matrixSize, 10);
+    if (matrixSizeValue < 2 || matrixSizeValue > 10) {
+      alert('Matrix size should be in range 2 and 10!');
+      return;
+    }
+    if (isNaN(matrixSizeValue)) {
+      alert('please enter valid value!');
+      return;
+    }
+    if (!Number.isInteger(parseFloat(matrixSize))) {
+      alert('Should be integer!');
+      return;
+    }
     const result = await postData('http://localhost:5000/lab2/generate', {
       matrixSize
     });
@@ -48,6 +65,20 @@ const Form = ({ onSubmit }: FormProps) => {
 
   const submitHandler = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const stepValue = parseFloat(step);
+    const matrixSizeValue = parseInt(matrixSize, 10);
+    if (matrixSizeValue < 2 || matrixSizeValue > 10) {
+      alert('Matrix size should be in range 2 and 10!');
+      return;
+    }
+    if (isNaN(matrixSizeValue) || isNaN(stepValue)) {
+      alert('please enter valid value!');
+      return;
+    }
+    if (!Number.isInteger(parseFloat(matrixSize))) {
+      alert('Should be integer!');
+      return;
+    }
     const result = await postData('http://localhost:5000/lab2/calculate', {
       intensityMaxtrix,
       step,
@@ -62,12 +93,14 @@ const Form = ({ onSubmit }: FormProps) => {
       <form onSubmit={generateHandler}>
         <Input
           onChange={(event) => {
-            setMatrixSize(parseFloat(event.target.value) ?? 0.0);
+            setMatrixSize(event.target.value);
           }}
           value={`${matrixSize}`}
           label="Quantity of conditions"
         />
-        <button type="submit">Generate intensity</button>
+        <button type="submit" style={{ margin: 8 }}>
+          Generate intensity
+        </button>
       </form>
       <div>
         {intensityMaxtrix?.map((row, rowIndex) => (
@@ -91,12 +124,14 @@ const Form = ({ onSubmit }: FormProps) => {
       <form onSubmit={submitHandler}>
         <Input
           onChange={(event) => {
-            setStep(parseFloat(event.target.value) ?? 0.0);
+            setStep(event.target.value);
           }}
           value={`${step}`}
-          label="step on graph"
+          label="Step on graph"
         />
-        <button type="submit">Solve and build graph</button>
+        <button type="submit" style={{ margin: 8 }}>
+          Solve and build graph
+        </button>
       </form>
     </div>
   );
